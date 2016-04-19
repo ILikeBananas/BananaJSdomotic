@@ -1,0 +1,30 @@
+{
+  "name": "banana_js_domotic",
+  "version": "1.0.0",
+  "description": "A little nodejs server who use johnny five to communicate with an arduino",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ILikeBananas/BananaJSdomotic.git"
+  },
+  "keywords": [
+    "nodejs",
+    "johnny",
+    "arduino",
+    "domotic"
+  ],
+  "author": "Jonny Hofmann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ILikeBananas/BananaJSdomotic/issues"
+  },
+  "homepage": "https://github.com/ILikeBananas/BananaJSdomotic#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "johnny-five": "^0.9.43",
+    "socket.io": "^1.4.5"
+  }
+}
