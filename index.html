@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>JE suis un poulet du swag</h1>
+        <p id="wow">Je suis un texte</p>
+        <input type="submit" onclick="change()" name="changer le relay"/>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script>
+        var socket = io('192.168.178.59:8080');
+        var openRelay;
+        socket.on("relayInfo" (open) => {
+            if(open == true){
+                document.getElementById("p2").style.color = "yellow";
+                open = true;
+            }  else {
+                document.getElementById("p2").style.color = "blue";
+                open = false;
+            }
+        });
+        change(){
+            if(openRelay == true) {
+                socket.emit("closeRealay");
+            } else {
+                socket.emit("openRelay");
+            }
+        }
+
+
+
+        </script>
+    </body>
+</html>

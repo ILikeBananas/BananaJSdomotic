@@ -1,46 +1,43 @@
 // Author : Jonny Hofmann (i_like__bananas)
 
 // Includes Modules
-var express = require("express");
-var app = express();
-var server = require("http").Server(app);
-var socket = require("socket.io")(server);
-var fs = require("fs");
-var path = require("path");
+var app = require('http').createServer(handler)
+var io = require('socket.io')(app);
+var fs = require('fs');
 var five = require("johnny-five");
+var config = require("./config.json");
 
-var config;
+app.listen(config.webPort);
 
-// Read the config file and start the server
-fs.readFile("config.json", "utf8", (err, data) => {
-    if(err){
-        console.log("Config file read error");
-    } else {
-        if (data["port"]){
-            console.log("Port not defined in config file");
-        } else {
-        data = JSON.parse(data);
-        server.listen(data["webPort"]);
-        console.log("Server started on port %d", data["webPort"]);
-
+function handler (req, res) {
+  fs.readFile(__dirname + '/index.html',
+  function (err, data) {
+    if (err) {
+      res.writeHead(500);
+      return res.end('Error loading index.html');
     }
-    }
-});
 
-// express routes
-app.get("/on", (req, res) => {
-    res.send("relay on");
-    relay.open();
-    console.log("relay on");
+    res.writeHead(200);
+    res.end(data);
+  });
+}
 
-});
-app.get("/off", (req, res) => {
-    res.send("relay off");
-    relay.close();
-    console.log("relay stoped");
+io.on("connection", (socket) => {
+    socket.emit("relayInfo", {"open" : relayOpen});
+    socket.on("closeRealay", () => {
+        relay.close();
+        relayOpen = false;
+        socket.emit("relayInfo", {"open" : relayOpen});
+    });
+    socket.on("openRelay", () => {
+        relay.open();
+        relayOpen = true;
+        socket.emit("relayInfo", {"open" : relayOpen});
+    })
 })
 
 // Johnny five
+var relayOpen = true;
 var board = new five.Board({
     port: "COM4"
 });
